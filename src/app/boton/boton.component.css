@@ -1,0 +1,23 @@
+.boton {
+  display: flex;
+  background-color: #6C8C90;
+  height: 75px;
+  width: 75px;
+  border-radius: 20px;
+  flex: 1;
+  border: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.boton:active {
+  background-color: #0000008a;
+  transform: scale(0.98);
+}
+
+h2 {
+  font-size: 48px;
+  color: #FFFFFF;
+  font-weight: bold;
+  font-family: 'Audiowide', sans-serif;
+}
