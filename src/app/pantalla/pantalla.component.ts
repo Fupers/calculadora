@@ -11,6 +11,9 @@ export class PantallaComponent implements OnInit {
 
   @Input() texto: string = '0';
   temp: string = ''; //Variable temporal
+  temp2: string = '';
+  operacion: string = '';
+  reinicio: boolean = false;
 
   constructor(private textoService: TextoService) {}
 
@@ -28,7 +31,6 @@ export class PantallaComponent implements OnInit {
       } else {
         this.texto = this.texto + this.temp;
       }
-      console.log(this.texto);
     }
   }
 
@@ -45,40 +47,83 @@ export class PantallaComponent implements OnInit {
     }
   }
 
-  suma(): void {
+  transicion(): void {
+    this.temp2 = this.texto;
+    this.texto = '';
+    this.operacion = this.temp;
+  }
 
+  suma(): void {
+    this.texto = String((Number(this.temp2))+(Number(this.texto)));
   }
 
   resta(): void {
-
+    this.texto = String((Number(this.temp2))-(Number(this.texto)));
   }
 
   multiplicacion(): void {
-
+    this.texto = String((Number(this.temp2))*(Number(this.texto)));
   }
 
   division(): void {
+    this.temp2 = String((Number(this.temp2))/(Number(this.texto)));
 
+    if (isFinite(Number(this.temp2)) == false) {
+      this.temp2 = String(Number(this.temp2).toFixed(10));
+    }
+    
+    if (this.temp2.length > 8) {
+      this.temp2 = this.temp2.slice(0, -(this.temp2.length - 8));
+    }
+
+    console.log(this.temp2);
+
+    this.texto = this.temp2;
   }
 
   porcentaje(): void {
-
+    this.texto = String((Number(this.texto))*100);
   }
 
   resultadoOperacion(): void {
-
+    if (this.operacion === '+') {
+      this.suma();
+    }
+    if (this.operacion === '-') {
+      this.resta();
+    }
+    if (this.operacion === '/') {
+      this.division();
+    }
+    if (this.operacion === 'X') {
+      this.multiplicacion();
+    }
   }
 
   procesoCalculadora(): void {
+    if (this.reinicio == true) {
+      this.texto = '0';
+      this.reinicio = false;
+    }
 
     if (!isNaN(Number(this.temp))) {
       this.updateTexto();
     } else {
-      if (this.temp === 'AC'){
+      if (this.temp === 'AC') {
         this.eliminarTodo();
       }
-      if (this.temp === 'C'){
+      if (this.temp === 'C') {
         this.eliminarUltimo();
+      }
+      if (this.temp === '%') {
+        this.porcentaje();
+      }
+      if (this.temp === '=') {
+        this.resultadoOperacion();
+        this.reinicio = true;
+      }
+      if ((this.temp === '+') || (this.temp === '-') || (this.temp === 'X') || (this.temp === '/')) {
+        this.transicion();
       }
     }
 
